@@ -1,0 +1,31 @@
+<html>
+<body>
+<form id="form">
+    <input type="text" id="inputMessage">
+</form>
+
+<div id="messageContainer" class="message-container"></div>
+</body>
+</html>
+
+<script>
+    var ws = new WebSocket('ws://localhost:8080/ws');
+
+    ws.onmessage = (e) => {
+        const el = document.getElementById('messageContainer');
+        const message = document.createElement("p");
+
+        message.innerText = e.data;
+        el.append(message);
+    }
+
+    const form = document.getElementById('form');
+    form.addEventListener('submit', (e) => {
+       e.preventDefault();
+
+       const input = document.getElementById('inputMessage');
+       ws.send(input.value);
+
+       input.value = '';
+    });
+</script>

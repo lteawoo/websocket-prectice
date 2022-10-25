@@ -11,7 +11,7 @@ import java.util.List;
 
 public class EchoTextHandler extends TextWebSocketHandler {
 
-    private static List<WebSocketSession> sessionList = Collections.synchronizedList(new ArrayList<>());
+    private static final List<WebSocketSession> sessionList = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * WebSocket 연결 훅

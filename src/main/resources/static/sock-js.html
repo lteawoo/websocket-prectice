@@ -8,24 +8,25 @@
 </body>
 </html>
 
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script>
-    var ws = new WebSocket('ws://localhost:8080/ws');
+    var ws = new SockJS('http://localhost:8080/sock');
 
     ws.onmessage = function (e) {
         var el = document.getElementById('messageContainer');
         var message = document.createElement("p");
 
         message.innerText = e.data;
-        el.append(message);
+        el.appendChild(message);
     }
 
     var form = document.getElementById('form');
     form.addEventListener('submit', function (e) {
-        e.preventDefault();
+       e.preventDefault();
 
-        var input = document.getElementById('inputMessage');
-        ws.send(input.value);
+       var input = document.getElementById('inputMessage');
+       ws.send(input.value);
 
-        input.value = '';
+       input.value = '';
     });
 </script>

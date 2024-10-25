@@ -1,0 +1,47 @@
+<html>
+<body>
+<form id="form">
+    <input type="text" id="inputMessage">
+</form>
+
+<button id="subscribe" type="button">subscribe</button>
+
+<div id="messageContainer" class="message-container"></div>
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+    const ws = new WebSocket('ws://localhost:8080/stomp/default');
+    const stompClient = Stomp.over(ws);
+    stompClient.connect({}, (frame) => {
+        const el = document.getElementById('messageContainer');
+        const p = document.createElement("p");
+
+        p.innerText = frame;
+        el.appendChild(p);
+    }, (err) => {
+        console.error(err);
+    });
+
+    const form = document.getElementById('form');
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const input = document.getElementById('inputMessage');
+        stompClient.send('/app/hello-and-send', {}, 'hello world');
+
+        input.value = '';
+    });
+
+    const subBtn = document.getElementById("subscribe");
+    subBtn.addEventListener('click', function (e) {
+        stompClient.subscribe('/topic', (frame) => {
+                const el = document.getElementById('messageContainer');
+                const p = document.createElement("p");
+
+                p.innerText = frame.body
+                el.appendChild(p);
+        })
+    })
+</script>
